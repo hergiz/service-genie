@@ -1,8 +1,28 @@
 # service-genie
-Service Genie - Work order management MVC 5 web app
+Service Genie - Work Order management MVC 5 web app
 
 Project home page: http://www.opacus.hr/en/ServiceGenie/General
+
 Demo is here: http://opacus.hr/ser
+
+
+INFO
+
+Service Genie is a web based application for Work Order management. Some of key features are:
+
+
+    Mobile friendly - Works on any device with internet connection. It is a web page!
+    For best compatibility only universal web technologies are used
+    Digital work order signing
+    E-mail notifications
+    Price lists for partners and ability not to show finances in work orders
+    Group invoicing and later view of orders in invoice. Don't allow yourself not to charge for the work done
+    Partner portal for monitoring work orders, creating new ones and view of invoices
+    Monitoring of hands efficiency based on hours and finished work orders
+    Beauty in simplicity
+
+If you require hosting, please contact me at igor@opacus.hr or for anything else for that mather.
+
 
 INSTALATION
 
