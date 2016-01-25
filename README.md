@@ -1,7 +1,10 @@
 # service-genie
 Service Genie - Work order management MVC 5 web app
 
+Project home page: http://www.opacus.hr/en/ServiceGenie/General
+Demo is here: http://opacus.hr/ser
 
+INSTALATION
 
 Pre requirements:
 
@@ -9,9 +12,6 @@ Pre requirements:
     Entity framework compatible database - check here. Tested only with MSSql
     Notepad and browser
     Application files
-
-
-INSTALATION
 
 Create a Database and user with appropriate rights. Write down host, user and password or any other information for database connection string.
 
