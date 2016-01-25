@@ -19,6 +19,7 @@ Service Genie is a web based application for Work Order management. Some of key 
     Group invoicing and later view of orders in invoice. Don't allow yourself not to charge for the work done
     Partner portal for monitoring work orders, creating new ones and view of invoices
     Monitoring of hands efficiency based on hours and finished work orders
+    Easy translation to any language
     Beauty in simplicity
 
 If you require hosting, please contact me at igor@opacus.hr or for anything else for that mather.
