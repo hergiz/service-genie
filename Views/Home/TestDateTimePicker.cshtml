@@ -1,0 +1,23 @@
+﻿@model DateTime
+@{
+    ViewBag.Title = "Test DateTimePicker";
+}
+
+<h2>Test DateTime Picker</h2>
+<p class="row text-center">
+	<div class="col-sm-4 col-sm-offset-4">
+		@Html.LabelFor(model => model, htmlAttributes: new { @class = "control-label" })
+		@MyHelpers.DateBox(Model, "ForDate", "form-control", "ForDate")
+		@Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+	</div>
+</p>
+<div class="clearfix"></div>
+@section Scripts {
+	<script type="text/javascript">
+		$('#ForDate').datetimepicker({
+			locale: '@System.Configuration.ConfigurationManager.AppSettings["Culture"]',
+			format: 'DD:MM:YYYY',
+		});
+	</script>
+	@Scripts.Render("~/bundles/jqueryval")
+}

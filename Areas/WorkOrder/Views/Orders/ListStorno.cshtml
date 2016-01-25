@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Ser.Areas.WorkOrder.Models.Orders.ListCanceledVM>
+@{
+    ViewBag.Title = Ress.Ress.ListStorno;
+}
+
+@section Action {
+	@Html.ActionLink(Ress.Ress.ListStorno, "ListStorno", null, new { @class = "btn btn-sm btn-primary" })
+	@Html.ActionLink(Ress.Ress.ListById, "ListById", null, new { @class = "btn btn-sm btn-primary" })
+	@Html.ActionLink(Ress.Ress.ListForUser, "Users", null, new { @class = "btn btn-sm btn-primary" })
+	@Html.ActionLink(Ress.Ress.NewOneStep, "NewOneStep", null, new { @class = "btn btn-sm btn-primary" })
+	@Html.ActionLink(Ress.Ress.New, "New", null, new { @class = "btn btn-sm btn-primary" })
+}
+@using (Html.BeginForm())
+{
+	<div class="row text-center form-inline">
+		<div class="col-sm-4 col-sm-offset-3">
+			<div class="form-group form-inline">
+				<label class="control-label" for="num">@Ress.Ress.Last</label>
+				<input type="number" name="num" value="@ViewBag.Num" class="form-control" id="num" />
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<input type="submit" value="@Ress.Ress.Filter" class="btn btn-primary" />
+		</div>
+	</div>
+}
+<div class="clearfix"></div>
+<br />
+@if (Model != null && Model.Count() > 0)
+{
+	<table class="table table-hover table-responsive">
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td colspan="7">
+					<table class="table table-responsive" style="background: none;">
+						<tr>
+							<td rowspan="3" class="col-sm-1 text-center">
+								<h1>@Html.ActionLink(item.OrderId.ToString(), "WorkOrder", "Print", new { @id = @item.OrderId }, new { @class = "text-danger", target = "_blank" })</h1>
+								<div>@item.ServiceName</div>
+								@MyDisplay.DateTimeToDateNoYear(item.ForDate)
+							</td>
+							<td class="col-sm-6">
+								<strong>@item.Title</strong>
+							</td>
+							<td rowspan="2" class="col-sm-3 text-center">
+								@if (item.MaterialNames != null && item.MaterialNames.Count() > 0)
+								{
+									foreach (var kom in item.MaterialNames)
+									{
+									<div><small>@kom.Id x @kom.Name</small></div>
+									}
+								}
+								else
+								{
+								<span class="glyphicon glyphicon-remove"></span>
+								}
+							</td>
+							<td rowspan="3" class="col-sm-2">
+								<div class="small">@Ress.Ress.EnteredBy: @item.EnteredBy</div>
+								<div class="small">@Ress.Ress.OnTheCase: @item.OnTheCase</div>
+								<div class="small">@Ress.Ress.FinishedBy: @item.FinishedBy</div>
+								<div class="small">@Ress.Ress.ApprovedBy: @item.ApprovedBy</div>
+								<div class="text-danger text-center">
+									<strong>@Ress.Ress.StornoBy</strong>
+									<div>@item.StornoByName</div>
+									<div><strong>@Ress.Ress.StornoReason</strong></div>
+									<div class="multiline">@item.StornoReason</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="no-border">
+								@Html.DisplayFor(modelItem => item.Approved) @item.PartnerFriendlyName
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" class="">
+								<div class="col-sm-1"><strong>@Ress.Ress.Fault:</strong></div>
+								<div class="col-sm-11 multiline">@Html.DisplayFor(modelItem => item.Fault)</div>
+								<div class="clearfix"></div>
+								<div class="col-sm-1"><strong>@Ress.Ress.Note:</strong></div>
+								<div class="col-sm-11 multiline">@Html.DisplayFor(modelItem => item.Note)</div>
+								<div class="clearfix"></div>
+								@if (item.MadeVM != null && item.MadeVM.Count > 0)
+								{
+								<table class="table small table-bordered table-responsive" style="background:none;">
+									@foreach (var made in item.MadeVM)
+									{
+										if (!(made.Hours == 0 && string.IsNullOrWhiteSpace(made.Section) && string.IsNullOrWhiteSpace(made.WhatWasMade)))
+										{
+										<tr>
+											<td class="small text-left col-sm-2">@made.Section</td>
+											<td class="small text-left multiline">@made.WhatWasMade</td>
+											<td class="small text-left col-sm-1">@made.Hours</td>
+										</tr>
+										}
+
+									}
+								</table>
+								}
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+										}
+	</table>
+	<hr />
+										}
+

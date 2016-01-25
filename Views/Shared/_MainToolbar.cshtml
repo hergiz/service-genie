@@ -1,0 +1,29 @@
+﻿@{ Ser.Logic.LApp lApp = new Ser.Logic.LApp();  }
+<ul class="nav navbar-nav ig-nav-primary">
+	<li>@Html.ActionLink(Ress.Orders, "Index", "Orders", new { area = "WorkOrder" }, null)</li>
+	<li>@Html.ActionLink(Ress.ListOrders, "List", "Orders", new { area = "WorkOrder" }, null)</li>
+	<li>@Html.ActionLink(Ress.Partners, "Index", "Partners", new { area = "Partners" }, null)</li>
+	<li>
+		@{ int dis = @Ser.Logic.LOrder.StaticDisapproveCount(); string cls = dis > 0 ? "badge-danger" : ""; }
+		<a href="@Url.Action("Index", "DisapprovedOrders", new { @area = "WorkOrder" })">@Ress.Disapproved <span class="badge @cls">@dis</span></a>
+	</li>
+	<li>@Html.ActionLink(Ress.Invoicing, "Index", "Finances", new { area = "WorkOrder" }, null)</li>
+	<li class="dropdown">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false" role="button">Admin <span class="caret"></span></a>
+		<ul class="dropdown-menu">
+			<li>
+				@Html.ActionLink(Ress.AdministrateService, "Index", "AdministrateService", new { area = "Admin" }, null)
+			</li>
+			<li>
+				@Html.ActionLink(Ress.AdministratePriceLists, "Index", "AdministratePriceLists", new { area = "Admin" }, null)
+			</li>
+			<li>
+				@Html.ActionLink(Ress.AdministrateApp, "Index", "AdministrateApp", new { area = "Admin" }, null)
+			</li>
+			<li>
+				@Html.ActionLink(Ress.SystemUsers, "Index", "SystemUsers", new { area = "Admin" }, null)
+			</li>
+		</ul>
+	</li>
+	
+</ul>

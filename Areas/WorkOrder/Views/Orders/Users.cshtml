@@ -1,0 +1,152 @@
+﻿@model IEnumerable<Ser.Areas.WorkOrder.Models.Orders.ListOrdersVM>
+@{
+	ViewBag.Title = Ress.Ress.ListForUser;
+}
+@section Action {
+@Html.ActionLink(Ress.Ress.ListStorno, "ListStorno", null, new { @class = "btn btn-sm btn-primary" })
+@Html.ActionLink(Ress.Ress.ListById, "ListById", null, new { @class = "btn btn-sm btn-primary" })
+@Html.ActionLink(Ress.Ress.ListForUser, "Users", null, new { @class = "btn btn-sm btn-primary" })
+@Html.ActionLink(Ress.Ress.NewOneStep, "NewOneStep", null, new { @class = "btn btn-sm btn-primary" })
+@Html.ActionLink(Ress.Ress.New, "New", null, new { @class = "btn btn-sm btn-primary" })
+}
+@using (Html.BeginForm())
+{
+	<div class="row text-center">
+		<div class="col-sm-2 col-sm-offset-2">
+			<div class="form-group">
+				@MyHelpers.DateBox(ViewBag.DateFrom, "dateFrom", "form-control", "DateFrom")
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<div class="form-group">
+				@MyHelpers.DateBox(ViewBag.DateTo, "dateTo", "form-control", "DateTo")
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<div class="form-group">
+				@MyHelpers.DropDown(ViewBag.Users, "user", "form-control")
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<input type="hidden" name="status" value="@ViewBag.Status" />
+			<input type="submit" value="@Ress.Ress.Filter" class="btn btn-primary" />
+		</div>
+	</div>
+}
+<div class="clearfix"></div>
+<br />
+<table class="table table-hover table-responsive">
+	@foreach (var item in Model)
+	{
+		string signedClass = "";
+		if (item.Approved == true)
+		{
+			signedClass = "bg-info";
+		}
+		if (item.Disapproved == true)
+		{
+			signedClass = "bg-warning";
+		}
+		if (!string.IsNullOrWhiteSpace(item.Invoice))
+		{
+			signedClass = "bg-success";
+		}
+		<tr class="@signedClass">
+			<td colspan="7">
+				<table class="table table-responsive" style="background: none;">
+					<tr>
+						<td rowspan="3" class="col-sm-1 text-center">
+							<h1>@Html.ActionLink(item.OrderId.ToString(), "WorkOrder", "Print", new { @id = @item.OrderId }, new { @class = "", target = "_blank" })</h1>
+							<div>@item.ServiceName</div>
+							@MyDisplay.DateTimeToDateNoYear(item.ForDate)
+						</td>
+						<td class="col-sm-6">
+							<strong>@item.Title</strong>
+						</td>
+						<td rowspan="2" class="col-sm-3 text-center">
+							@if (item.MaterialNames != null && item.MaterialNames.Count() > 0)
+							{
+								foreach (var kom in item.MaterialNames)
+								{
+								<div><small>@kom.Id x @kom.Name</small></div>
+								}
+							}
+							else
+							{
+							<span class="glyphicon glyphicon-remove"></span>
+							}
+						</td>
+						<td rowspan="3" class="col-sm-2">
+							<div class="small">@Ress.Ress.EnteredBy: @item.EnteredBy</div>
+							<div class="small">@Ress.Ress.OnTheCase: @item.OnTheCase</div>
+							<div class="small">@Ress.Ress.FinishedBy: @item.FinishedBy</div>
+							<div class="small">@Ress.Ress.ApprovedBy: @item.ApprovedBy</div>
+							<div class="text-right">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="no-border">
+							@Html.DisplayFor(modelItem => item.Approved) @item.PartnerFriendlyName
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="">
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Price: </strong>
+								<h3 class="ig-display-inline">@Html.DisplayFor(modelItem => item.PriceVM.Price)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Hours: </strong>
+								<h3 class="ig-display-inline">@Html.DisplayFor(modelItem => item.PriceVM.Hours)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Arrival: </strong>
+								<h3 class="ig-display-inline">@MyDisplay.CurrencyNullDecimal(item.Arrival)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Total: </strong>
+								@{ string clas = ""; }
+								@if (item.Total.HasValue)
+								{
+									clas = "text-danger";
+								}
+								<h3 class="ig-display-inline @clas">@Html.DisplayFor(modelItem => item.TotalTotal)</h3>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+									}
+</table>
+<hr />
+@if (ViewBag.Sum != null && ViewBag.Sum.Count > 0)
+{
+	decimal tot = 0;
+	foreach (var x in ViewBag.Sum)
+	{
+	<div class="row">
+		<div class="col-sm-2 col-sm-offset-1"><h3>@x.ServiceName</h3></div>
+		<div class="col-sm-3 text-right">
+			<h3 class="ig-display-inline">@x.Hours</h3>
+		</div>
+		<div class="col-sm-1 text-left">
+			<strong>@Ress.Ress.Hours</strong>
+		</div>
+		<div class="col-sm-3 text-right">
+			<h3 class="ig-display-inline">@MyDisplay.Currency(x.Total)</h3>
+		</div>
+	</div>
+		if (x.Total != null && x.Total > 0)
+		{
+			tot += x.Total;
+		}
+	}
+	<hr />
+	<div class="row">
+		<div class="col-sm-10 text-right">
+			<h2>@MyDisplay.Currency(tot)</h2>
+		</div>
+	</div>
+}

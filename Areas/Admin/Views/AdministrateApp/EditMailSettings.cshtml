@@ -1,0 +1,79 @@
+﻿@model Ser.Models.MailSettingsVM
+@{
+    ViewBag.Title = Ress.Ress.TitleEditMailSettings;
+}
+
+@section Action {
+	@Html.ActionLink(Ress.Ress.Cancel, "Index", null, new { @class = "btn btn-sm btn-default" })
+}
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		
+		<div class="form-group">
+			@Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.TextBoxFor(model => model.From, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.From, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Host, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.TextBoxFor(model => model.Host, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Host, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Port, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.TextBoxFor(model => model.Port, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Port, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Password, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.SSL, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.SSL, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.SSL, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-12 text-right">
+				<input type="submit" value="@Ress.Ress.Save" class="btn btn-primary" />
+			</div>
+		</div>
+	</div>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

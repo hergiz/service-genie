@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Ser.Models.SysAdminVM.EditUserViewModel>
+
+@{
+    ViewBag.Title = Ress.Ress.SystemUsers;
+}
+@section Action {
+	@Html.ActionLink(Ress.Ress.New, "Create", null, new { @class = "btn btn-sm btn-primary" })
+}
+<table class="table">
+    <tr>
+        <th>
+            @Ress.Ress.Name
+        </th>
+		<th>
+			@Ress.Ress.UserName
+		</th>
+		<th>
+			@Ress.Ress.Contact
+		</th>
+		<th>
+			@Ress.Ress.Mail
+		</th>
+		<th>
+			@Ress.Ress.PartnerId
+		</th>
+        <th>
+			@Ress.Ress.Roles
+        </th>
+		<th>
+			@Ress.Ress.Action
+		</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+			<td>
+				@item.Name
+			</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Contact)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Email)
+			</td>
+			<td>
+				@item.PartnerName
+			</td>
+			<td>
+				@foreach (var grup in item.RolesList)
+				{
+					if (!(grup.Text == "SysAdmin"))
+					{
+						<div>@grup.Text</div>
+					}
+				}
+			</td>
+            <td>
+                @Html.ActionLink(Ress.Ress.Edit, "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-default" })
+				<a href="@Url.Action(Ress.Ress.Delete, new { id=item.Id })" class="btn btn-xs btn-danger">
+					<span class="glyphicon glyphicon-remove"></span>
+				</a>
+            </td>
+        </tr>
+    }
+
+</table>

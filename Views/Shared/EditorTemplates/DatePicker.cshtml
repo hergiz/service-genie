@@ -1,0 +1,14 @@
+﻿@model DateTime?
+@{
+	string sad;
+	if (Model.HasValue)
+	{
+		sad = Model.Value.ToString("dd.MM.yyyy");
+	}
+	else
+	{
+		sad = DateTime.Now.AddDays(1).ToString("dd.MM.yyyy");
+	}
+		
+}
+@{<input type="datetime" name="Date" id="DatePicker" class="form-control datepicker" value="@sad" data-date-format="DD.MM.YYYY" />} 

@@ -1,0 +1,260 @@
+﻿@model IEnumerable<Ser.Areas.WorkOrder.Models.Orders.ListOrdersVM>
+@{
+	Layout = "~/Views/Shared/_PartnerPortalLayout.cshtml";
+	ViewBag.Title = Ress.PartnerPortal;
+}
+
+@section Action {
+	@Html.ActionLink(Ress.New, "New", null, new { @class = "btn btn-sm btn-primary" })
+}
+
+@using (Html.BeginForm())
+{
+	<div class="row text-center">
+		<div class="col-sm-6">
+			@Html.ActionLink(Ress.All, "Index", null, new { @class = "btn btn-default" })
+			@Html.ActionLink(Ress.Status1, "Index", new { status = 1, dateFrom = ViewBag.DateFrom, dateTo = ViewBag.DateTo }, new { @class = "btn btn-warning" })
+			@Html.ActionLink(Ress.Status2, "Index", new { status = 2, dateFrom = ViewBag.DateFrom, dateTo = ViewBag.DateTo }, new { @class = "btn btn-success" })
+			<a href="@Url.Action("Index", new { status = 3, dateFrom = ViewBag.DateFrom, dateTo = ViewBag.DateTo })" class="btn btn-primary">@Ress.Status3 <span class="badge">@ViewBag.FinishedCount</span></a>
+			@Html.ActionLink(Ress.Status4, "Index", new { status = 4, dateFrom = ViewBag.DateFrom, dateTo = ViewBag.DateTo }, new { @class = "btn btn-info" })
+			@Html.ActionLink(Ress.Status6, "Index", new { status = 6, dateFrom = ViewBag.DateFrom, dateTo = ViewBag.DateTo }, new { @class = "btn btn-success" })
+		</div>
+			
+		<div class="col-sm-2">
+			<div class="form-group">
+				@MyHelpers.DateBox(ViewBag.DateFrom, "dateFrom", "form-control", "DateFrom")
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<div class="form-group">
+				@MyHelpers.DateBox(ViewBag.DateTo, "dateTo", "form-control", "DateTo")
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<input type="hidden" name="status" value="@ViewBag.Status" />
+			<input type="submit" value="@Ress.Filter" class="btn btn-default btn-sm" />
+			@Html.ActionLink(Ress.Reset, "Index", null, new { @class = "btn btn-default btn-sm" })
+		</div>
+	</div>
+}
+<div class="clearfix"></div>
+<br />
+<table class="table table-hover table-responsive">
+@if (Model != null && Model.Count() > 0)
+{
+	foreach (var item in Model)
+	{
+		string signedClass = "";
+		if (item.Approved == true)
+		{
+			signedClass = "bg-info";
+		}
+		if (item.Disapproved == true)
+		{
+			signedClass = "bg-warning";
+		}
+		if (!string.IsNullOrWhiteSpace(item.Invoice))
+		{
+			signedClass = "bg-success";
+		}
+		<tr class="@signedClass">
+			<td>
+				<table class="table table-responsive" style="background: none;">
+					<tr>
+						<td rowspan="2" class="col-sm-1 text-center">
+							<h1>@Html.ActionLink(item.OrderId.ToString(), "WorkOrder", "Print", new { area = "WorkOrder", @id = @item.OrderId }, new { @class = "", target = "_blank" })</h1>
+							<div>@item.ServiceName</div>
+							@MyDisplay.DateTimeToDateNoYear(item.ForDate)
+						</td>
+						<td class="col-sm-6">
+							<strong>@item.Title</strong>
+						</td>
+						<td class="col-sm-3 text-center">
+							<div><strong>@Ress.Material</strong></div>
+
+							@if (item.MaterialNames != null && item.MaterialNames.Count() > 0)
+							{
+								foreach (var kom in item.MaterialNames)
+								{
+								<div><small>@kom.Id x @kom.Name</small></div>
+								}
+							}
+							else
+							{
+							<span class="glyphicon glyphicon-remove"></span>
+							}
+						</td>
+						<td rowspan="2" class="col-sm-2">
+							@if (!string.IsNullOrWhiteSpace(item.Invoice))
+							{
+							<div class="text-center">
+								<strong>@Ress.Invoice</strong>
+								<h4>@item.Invoice</h4>
+							</div>
+							}
+							else
+							{
+							<div class="small">@Ress.EnteredBy: @item.EnteredBy</div>
+							<div class="small">@Ress.OnTheCase: @item.OnTheCase</div>
+							<div class="small">@Ress.FinishedBy: @item.FinishedBy</div>
+							<div class="small">@Ress.ApprovedBy: @item.ApprovedBy</div>
+							}
+							
+							 @if (item.Approved == false && !string.IsNullOrWhiteSpace(item.FinishedBy))
+							 {
+							<div id="ApproveDisapprove-@item.OrderId" class="text-center">
+								@* Disapprove *@
+								<button type="button" data-toggle="modal" data-target="#Disapprove-@item.OrderId" class="btn btn-danger">
+									@Ress.Disapprove
+								</button>
+								<div class="modal fade" id="Disapprove-@item.OrderId" tabindex="-1" role="dialog" aria-labelledby="DisapprovelLabel-@item.OrderId" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">@Ress.Close</span></button>
+												<h4 class="modal-title text-center" id="DisapprovelLabel-@item.OrderId">@Ress.Disapprove</h4>
+											</div>
+											@using (Html.BeginForm("_DisapproveOrder", "PartnerPortal", FormMethod.Post))
+											{
+												@Html.AntiForgeryToken()
+												<div class="modal-body">
+													<div class="row">
+														<div class="col-sm-4 col-lg-offset-4">
+															<label class="control-label" for="DisapproveReason-@item.OrderId">@Ress.DisapproveReason</label>
+															<textarea class="form-control" data-val="true" data-val-required="@Ress.ErrNotEmpty" id="DisapproveReason-@item.OrderId" name="DisapproveReason"></textarea>
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<input type="hidden" name="OrderId" value="@item.OrderId" />
+													<input type="hidden" name="dateFrom" value="ViewBag.DateFrom" />
+													<input type="hidden" name="dateTo" value="ViewBag.DateTo" />
+													<input type="hidden" name="status" value="ViewBag.Status" />
+													<button type="button" class="btn btn-default" data-dismiss="modal">@Ress.Cancel</button>
+													<button type="submit" class="btn btn-danger">@Ress.Disapprove</button>
+												</div>
+											}
+										</div>
+									</div>
+								</div>
+								@* End disapprove *@
+								@{ string updateTarget = "ApproveDisapprove-" + item.OrderId; }
+								@Ajax.ActionLink(Ress.Approve, "_ApproveOrder", "PartnerPortal", 
+									new { OrderId = item.OrderId }, 
+									new AjaxOptions
+									{
+										HttpMethod = "GET",
+										InsertionMode = InsertionMode.ReplaceWith,
+										UpdateTargetId = updateTarget,
+									}, new { @class = "btn btn-primary" })
+							</div>
+							 }
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="text-right">
+							<div class="row">
+								@{ string c1 = "col-sm-10"; string c2 = "col-sm-2";}
+								@if (string.IsNullOrWhiteSpace(item.FinishedBy))
+								{
+									c1 = "col-sm-12"; c2 = "hidden";
+								}
+								<div class="@c1">
+									<div class="col-sm-1 text-left small"><strong>@Ress.Fault:</strong></div>
+									<div class="col-sm-11 text-left small">@Html.DisplayFor(modelItem => item.Fault)</div>
+									@if (item.MadeVM != null && item.MadeVM.Count > 0)
+									{
+									<table class="table small table-bordered table-responsive" style="background:none;">
+										@foreach (var made in item.MadeVM)
+										{
+											if (!(made.Hours == 0 && string.IsNullOrWhiteSpace(made.Section) && string.IsNullOrWhiteSpace(made.WhatWasMade)))
+											{
+											<tr>
+												<td class="small text-left col-sm-2">@made.Section</td>
+												<td class="small text-left multiline">@made.WhatWasMade</td>
+												<td class="small text-left col-sm-1">@made.Hours</td>
+											</tr>
+											}
+
+										}
+									</table>
+									}
+								</div>
+								<div class="@c2">
+									@if (item.ShowFinances == true)
+									{
+									<div>
+										<strong>@Ress.Hours: </strong>
+										<h3 class="">@Html.DisplayFor(modelItem => item.PriceVM.Hours)</h3>
+									</div>
+									<div>
+										<strong>@Ress.Total: </strong>
+										<h3 class="">@Html.DisplayFor(modelItem => item.TotalTotal)</h3>
+									</div>
+									}
+									else
+									{
+									<div class="col-sm-12">
+										<strong>@Ress.Hours: </strong>
+										<h3 class="ig-display-inline">@Html.DisplayFor(modelItem => item.PriceVM.Hours)</h3>
+									</div>
+									}
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	}
+}
+</table>
+<hr />
+@if (ViewBag.Sum != null && ViewBag.Sum.Count > 0)
+{
+	decimal tot = 0;
+	foreach (var x in ViewBag.Sum)
+	{
+	<div class="row">
+		<div class="col-sm-2 col-sm-offset-1"><h3>@x.ServiceName</h3></div>
+		<div class="col-sm-3 text-right">
+			<h3 class="ig-display-inline">@x.Hours</h3>
+		</div>
+		<div class="col-sm-1 text-left">
+			<strong>@Ress.Hours</strong>
+		</div>
+		<div class="col-sm-3 text-right">
+			<h3 class="ig-display-inline">@MyDisplay.Currency(x.Total)</h3>
+		</div>
+	</div>
+		if (x.Total != null && x.Total > 0)
+		{
+			tot += x.Total;
+		}
+	}
+	<hr />
+	<div class="row">
+		<div class="col-sm-10 text-right">
+			<h2>@MyDisplay.Currency(tot)</h2>
+		</div>
+	</div>
+}
+@section Scripts {
+	<script type="text/javascript">
+		$(function () {
+			$('#DateFrom').datetimepicker({
+				locale: '@System.Configuration.ConfigurationManager.AppSettings["Culture"]',
+				format: 'DD:MM:YYYY',
+			});
+		});
+		$(document).ready(function () {
+			$(document).on('focus', '#DateTo', function () {
+				$(this).datetimepicker({
+					locale: '@System.Configuration.ConfigurationManager.AppSettings["Culture"]',
+					format: 'DD:MM:YYYY',
+				});
+			});
+		});
+	</script>
+	@Scripts.Render("~/bundles/jqueryval")
+}

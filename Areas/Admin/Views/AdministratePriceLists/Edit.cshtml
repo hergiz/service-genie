@@ -1,0 +1,41 @@
+﻿@model Ser.Areas.Admin.Models.PriceLists.EditPriceListsVM
+
+@{
+    ViewBag.Title = Ress.Ress.Edit;
+}
+@section Action {
+	@Html.ActionLink(Ress.Ress.Cancel, "Index", null, new { @class = "btn btn-sm btn-default" })
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	<h1 class="text-center">@Model.PartnerName</h1>
+	<div class="col-sm-5 col-sm-offset-3">
+		@for (int i = 0; i < Model.PriceListsVM.Count(); i++)
+		{
+		<p class="form-group">
+			<div class="col-md-6 text-right"><strong class="control-label">@Model.PriceListsVM[i].ServiceName</strong></div>
+			<div class="col-md-6">
+				@Html.HiddenFor(model => model.PriceListsVM[i].ServiceId)
+				@Html.HiddenFor(model => model.PriceListsVM[i].ServiceName)
+				@Html.EditorFor(model => model.PriceListsVM[i].Price, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.PriceListsVM[i].Price, "", new { @class = "text-danger" })
+			</div>
+		</p>
+		<div class="clearfix"></div>
+		}
+		<p class="form-group">
+			<div class="col-sm-12 text-right">
+				@Html.HiddenFor(model => model.PartnerId)
+				@Html.HiddenFor(model => model.PartnerName)
+				<input type="submit" value="@Ress.Ress.Save" class="btn btn-primary" />
+			</div>
+		</p>
+	</div>
+	<div class="clearfix"></div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

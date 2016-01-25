@@ -1,0 +1,172 @@
+﻿@model Ser.Areas.WorkOrder.Models.Print.PrintOrderDetailsVM
+@{
+		Layout = "~/Views/Shared/_PrintLayout.cshtml";
+		ViewBag.Title = Ress.Ress.TitlePrintWorkOrder + " " + Model.OrderId;
+}
+<div class="row">
+	<div class="col-sm-6">
+		<img src="~/Content/img/applicon.jpg" />
+	</div>
+	<div class="col-sm-6">
+		@{ bool x = false; }
+		@foreach (var item in Model.CompanyDetails)
+		{
+			if (x == false)
+			{
+			<h2>@item</h2>
+				x = true;
+			}
+			else
+			{
+			<div>@item</div>
+			}
+		}
+	</div>
+</div>
+<div class="well col-sm-6">
+	<div class="row">
+		<div class="col-sm-12">
+			<h2>@Model.Partner.Name</h2>
+			<div class="multiline">@Model.Partner.Adress</div>
+		</div>
+	</div>
+</div>
+<div class="clearfix"></div>
+<br />
+<div class="row text-center">
+<h1>@Ress.Ress.WorkOrderNo @Model.OrderId</h1>
+</div>
+<br />
+<div class="row">
+	<div class="panel panel-default">
+		<div class="panel-heading">@Ress.Ress.Title</div>
+		<div class="panel-body">
+			@Model.Title
+		</div>
+	</div>
+</div>
+<br />
+@if (Model.MadeVM != null && Model.MadeVM.Count > 0)
+{
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-sm-3">
+						@Ress.Ress.Section
+					</div>
+					<div class="col-sm-8">
+						@Ress.Ress.WhatWasMade
+					</div>
+					<div class="col-sm-1">
+						@Ress.Ress.Hours
+					</div>
+				</div>
+			</div>
+			<div class="panel-body">
+				@{ decimal hours = 0; }
+				@foreach (var made in Model.MadeVM)
+				{
+				<div class="row">
+					<div class="col-sm-3">
+						@made.Section
+					</div>
+					<div class="col-sm-8 multiline">
+						@made.WhatWasMade
+					</div>
+					<div class="col-sm-1">
+						@made.Hours
+						@{ hours += made.Hours; }
+					</div>
+				</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+<br />
+<div class="row">
+	<div class="col-sm-6">
+		@if (Model.Materials != null && Model.Materials.Count > 0)
+		{
+			<div class="panel panel-default">
+				<div class="panel-heading">@Ress.Ress.Material</div>
+				<div class="panel-body">
+					@foreach (var mat in Model.Materials)
+					{
+						<div class="row">
+							<div class="col-sm-2">@mat.Id x </div>
+							<div class="col-sm-10">@mat.Name</div>
+						</div>
+					}
+				</div>
+			</div>
+		}
+	</div>
+	<div class="col-sm-6">
+		@if (Model.Partner.ShowFinances == true && Model.PriceVM != null)
+		{
+		<div class="panel panel-default">
+			<div class="panel-heading">@Ress.Ress.Finances</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-5">
+						<strong>@Ress.Ress.Price: </strong>
+					</div>
+					<div class="col-sm-7">@Html.DisplayFor(model => model.PriceVM.Price)</div>
+					<div class="col-sm-5">
+						<strong>@Ress.Ress.Hours: </strong>
+					</div>
+					<div class="col-sm-7">@Html.DisplayFor(model => model.PriceVM.Hours)</div>
+					<div class="col-sm-5">
+						<strong>@Ress.Ress.Arrival: </strong>
+					</div>
+					<div class="col-sm-7">@MyDisplay.CurrencyNullDecimal(Model.Arrival)</div>
+					<div class="col-sm-5">
+						<strong>@Ress.Ress.Total: </strong>
+					</div>
+					<div class="col-sm-7">@Html.DisplayFor(model => model.TotalTotal)</div>
+				</div>
+			</div>
+		</div>
+		}
+	</div>
+</div>
+<br />
+<div class="row">
+	<div class="col-sm-4">
+		<strong>@Ress.Ress.Date: </strong>@MyDisplay.DateTimeToDate(Model.ForDate)
+	</div>
+	<div class="col-sm-8">
+		@if (Model.Approved == true && !String.IsNullOrWhiteSpace(Model.ApprovedByName))
+		{
+			<strong>@Ress.Ress.Approved: </strong>@Model.ApprovedByName
+		}
+	</div>
+</div>
+<br />
+<div class="row">
+	<div class="col-sm-4 col-sm-offset-1 text-center">
+		@Model.Partner.Name
+		<br />
+		<br />
+		<hr />
+	</div>
+	<div class="col-sm-4 col-sm-offset-2 text-center">
+		@if (!String.IsNullOrWhiteSpace(Model.FinishedByName))
+		{
+			@Model.FinishedByName
+		}
+		else if (!String.IsNullOrWhiteSpace(Model.OnTheCaseName))
+		{
+			@Model.OnTheCaseName	
+		}
+		else 
+		{
+			@Model.EnteredByName
+		}
+		<br />
+		<br />
+		<hr />
+	</div>
+</div>

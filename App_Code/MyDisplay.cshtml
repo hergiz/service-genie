@@ -1,0 +1,70 @@
+﻿@helper DateTimeToTime(DateTime val)
+{
+	@val.ToString(@"HH:mm")
+}
+
+@helper DateTimeToDate(DateTime val)
+{
+	@val.ToString(@"dd.MM.yyyy")
+}
+
+@helper DateTimeToDateNoYear(DateTime val)
+{
+	@val.ToString(@"dd.MM.")
+}
+
+@helper DateTimeToDateWithName(DateTime val)
+{
+	@val.ToString(@"dd.MM.yyyy - dddd")
+}
+
+@helper DateTimeToDateTime(DateTime val)
+{
+	@val.ToString(@"dd.MM.yyyy @ HH:mm")
+}
+
+@helper TimeSpanToTime(TimeSpan? val)
+{
+	if (val.HasValue)
+	{
+		var tmp = DateTime.Today.Add((TimeSpan)val);
+		@tmp.ToString(@"HH:mm")
+	}
+}
+
+@helper DropDownToUl(List<Ser.Models.MyHelpers.DropDown> val)
+{
+	if (val != null)
+	{
+	<div class="btn-group">
+		@foreach (var item in val)
+		{
+		<span class="btn btn-default disabled">@item.Name</span>
+		}
+	</div>
+	}
+}
+
+@helper CurrencyNullDecimal(decimal? val)
+{
+	if (val.HasValue)
+	{
+		IFormatProvider formatProvider = new System.Globalization.CultureInfo(System.Configuration.ConfigurationManager.AppSettings["Culture"]);
+		<span>@Model.ToString("C", formatProvider)</span>
+	}
+	else
+	{
+		<span class="glyphicon glyphicon-remove"></span>	
+	}
+}
+
+@helper Currency(decimal? val)
+{
+	decimal x = 0;
+	if (val.HasValue)
+	{
+		x = (decimal)val;
+	}
+	IFormatProvider formatProvider = new System.Globalization.CultureInfo(System.Configuration.ConfigurationManager.AppSettings["Culture"]);
+	<span>@x.ToString("C", formatProvider)</span>
+}

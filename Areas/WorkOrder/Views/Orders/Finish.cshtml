@@ -1,0 +1,194 @@
+﻿@model Ser.Areas.WorkOrder.Models.Orders.CompleteWorkOrderVM
+@{
+	ViewBag.Title = Ress.Ress.TitleCompleteWorkOrder;
+}
+@section Action {
+	@Html.ActionLink(Ress.Ress.Cancel, "Index", null, new { @class = "btn btn-sm btn-default" })
+}
+
+<table class="table table-hover table-responsive">
+	<tr>
+		<td colspan="6">
+			<table class="table table-responsive" style="background: none;">
+				<tr>
+					<td rowspan="3" class="col-sm-1 text-center">
+						<h1>@Model.OrderId</h1>
+						<div>@MyDisplay.DateTimeToDate(Model.ForDate)</div>
+						<div>@Model.ServiceName</div>
+					</td>
+					<td class="col-sm-6">
+						<strong>@Model.Title</strong>
+					</td>
+					<td rowspan="2" class="col-sm-3 text-center">
+						@if (Model.MaterialNames != null && Model.MaterialNames.Count() > 0)
+						{
+							foreach (var kom in Model.MaterialNames)
+							{
+							<div><small>@kom.Id x @kom.Name</small></div>
+							}
+						}
+						else
+						{
+						<span class="glyphicon glyphicon-remove"></span>
+						}
+						<div>
+							@* Material *@
+							<a data-toggle="modal" data-target="#Material-@Model.OrderId" class="btn btn-primary btn-xs">
+								@Ress.Ress.Add
+							</a>
+							<div class="modal fade" id="Material-@Model.OrderId" tabindex="-1" role="dialog" aria-labelledby="MaterialLabel-@Model.OrderId" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">@Ress.Ress.Close</span></button>
+											<h4 class="modal-title text-center" id="MaterialLabel-@Model.OrderId">@Ress.Ress.Material</h4>
+										</div>
+										@using (Html.BeginForm("_Material", "Orders", FormMethod.Post))
+										{
+										@Html.AntiForgeryToken()
+											<div class="modal-body">
+												<div class="row text-center">
+													<div class="col-sm-4 col-lg-offset-4">
+														<label class="control-label" for="MaterialKom-@Model.OrderId">@Ress.Ress.Piece</label>
+														<input class="form-control" data-val="true" data-val-required="@Ress.Ress.ErrNotEmpty" id="MaterialKom-@Model.OrderId" name="Piece" type="number" value="1" />
+													</div>
+												</div>
+												<div class="row text-center">
+													<div class="col-sm-6 col-lg-offset-3">
+														<label class="control-label" for="MaterialName-@Model.OrderId">@Ress.Ress.MaterialNames</label>
+														<input class="form-control" data-val="true" data-val-required="@Ress.Ress.ErrNotEmpty" id="MaterialName-@Model.OrderId" name="MaterialName" type="text" value="" />
+													</div>
+												</div>
+											</div>
+												<div class="modal-footer">
+													<input type="hidden" name="id" value="@Model.OrderId" />
+													<input type="hidden" name="returnTo" value="Finish" />
+													<button type="button" class="btn btn-default" data-dismiss="modal">@Ress.Ress.Cancel</button>
+													<button type="submit" class="btn btn-primary">@Ress.Ress.Add</button>
+												</div>
+										}
+									</div>
+								</div>
+							</div>
+							@* End Material *@
+						</div>
+					</td>
+					<td rowspan="3" class="col-sm-2">
+						<div class="small">@Ress.Ress.EnteredBy: @Model.EnteredBy</div>
+						<div class="small">@Ress.Ress.OnTheCase: @Model.OnTheCase</div>
+						<div class="small">@Ress.Ress.FinishedBy: @Model.FinishedBy</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="no-border">
+						@Model.PartnerFriendlyName
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="">
+						<div class="col-sm-1"><strong>@Ress.Ress.Fault:</strong></div>
+						<div class="col-sm-11">@Html.DisplayFor(modelItem => Model.Fault)</div>
+						<div class="col-sm-1"><strong>@Ress.Ress.Note:</strong></div>
+						<div class="col-sm-11">@Html.DisplayFor(modelItem => Model.Note)</div>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary()
+
+if (Model.MadeVM != null && Model.MadeVM.Count > 0)
+{
+	for (int i = 0; i < Model.MadeVM.Count; i++)
+	{
+		<div class="row text-center" id="add-WhatWasMade">
+			@{ Model.MadeVM[i].Index = i; Html.RenderPartial("_WhatWasMade", Model.MadeVM[i]); }
+		</div>
+	}
+}
+else
+{
+	<div class="row text-center" id="add-WhatWasMade">
+		@{ Html.RenderAction("_WhatWasMade", "Orders", new { @id = 0, i = 0 }); }
+	</div>
+}
+<div class="row text-center">
+	<div class="col-sm-12">
+		@Html.ActionLink(Ress.Ress.Add, "_WhatWasMade", null, new { @id = "add", @class = "btn btn-default" })
+	</div>
+</div>
+<hr />
+<div class="row text-center">
+	<div class="col-sm-12">
+		@Html.LabelFor(model => model.ServiceId, htmlAttributes: new { @class = "control-label" })
+		@MyHelpers.RadioBox(Model.Service, "ServiceId", "form-control")
+		@Html.ValidationMessageFor(model => model.ServiceId, "", new { @class = "text-danger" })
+	</div>
+</div>
+
+<p class="row text-center">
+	<div class="col-sm-2 col-sm-offset-4">
+		@Html.LabelFor(model => model.Arrival, htmlAttributes: new { @class = "control-label" })
+		@Html.TextBoxFor(model => model.Arrival, new { @class = "form-control" })
+		@Html.ValidationMessageFor(model => model.Arrival, "", new { @class = "text-danger" })
+	</div>
+	<div class="col-sm-2">
+		@Html.LabelFor(model => model.Total, htmlAttributes: new { @class = "control-label" })
+		@Html.TextBoxFor(model => model.Total, new { @class = "form-control" })
+		@Html.ValidationMessageFor(model => model.Total, "", new { @class = "text-danger" })
+	</div>
+</p>
+<p class="row text-center">
+	<div class="col-sm-4 col-sm-offset-4">
+		@Html.LabelFor(model => model.ForDate, htmlAttributes: new { @class = "control-label" })
+		@MyHelpers.DateBox(Model.ForDate, "ForDate", "form-control", "ForDate")
+		@Html.ValidationMessageFor(model => model.ForDate, "", new { @class = "text-danger" })
+	</div>
+</p>
+<p class="row text-center">
+	<div class="col-sm-4 col-sm-offset-4">
+		@Html.LabelFor(model => model.DontSendEmail, htmlAttributes: new { @class = "control-label" })
+		@Html.EditorFor(model => model.DontSendEmail, new { @class = "form-control" })
+		@Html.ValidationMessageFor(model => model.DontSendEmail, "", new { @class = "text-danger" })
+	</div>
+</p>
+<div class="row text-center">
+	<div class="col-sm-12">
+		@Html.HiddenFor(model => model.OrderId)
+		<br />
+		<button type="submit" name="Save" value="true" class="btn btn-primary">@Ress.Ress.Save</button>
+	</div>
+</div>
+}
+@section Scripts {
+	<script type="text/javascript">
+		$(function () {
+			$('#add').click(function () {
+				var index = $("input.iHidden").length;
+				$.ajax({
+					url: this.href,
+					type: 'GET',
+					data: { id: null, i: index },
+					cache: false,
+					success: function (result) {
+						$('#add-WhatWasMade').append(result);
+					}
+				});
+				return false;
+			});
+		});
+		$(document).ready(function () {
+			$(document).on('focus', '#ForDate', function () {
+				$(this).datetimepicker({
+					locale: '@System.Configuration.ConfigurationManager.AppSettings["Culture"]',
+					format: 'DD:MM:YYYY',
+				});
+			});
+		});
+	</script>
+	@Scripts.Render("~/bundles/jqueryval")
+}

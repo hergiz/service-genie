@@ -1,0 +1,55 @@
+﻿@model Ser.Areas.Admin.Models.AdministrateApp.IndexBasicAppVM
+@{
+    ViewBag.Title = Ress.Ress.TitleBasicAppSettings;
+	TempData["Err"] = Ress.Ress.CachInfo;
+}
+
+@section Action {
+	@Html.ActionLink(Ress.Ress.AppEditCompanyDetails, "EditCompanyDetails", null, new { @class = "btn btn-sm btn-default" })
+	@Html.ActionLink(Ress.Ress.NotifyToMailEdit, "EditNotifyToMail", null, new { @class = "btn btn-sm btn-default" })
+	@*@Html.ActionLink(Ress.Ress.AppEditMailSettings, "EditMailSettings", null, new { @class = "btn btn-sm btn-default" })*@
+}
+
+<h1 class="text-center">@Ress.Ress.TitleCompanyDetails</h1>
+@if (Model.CompanyDetails != null && Model.CompanyDetails.Count() > 0)
+{
+	<div class="well col-sm-6 col-sm-offset-3">
+		<div class="row">
+			@foreach (var item in Model.CompanyDetails)
+			{
+			<div class="col-sm-12 text-center">@item.Val</div>
+			}
+		</div>
+	</div>
+	<div class="clearfix"></div>
+}
+
+<h1 class="text-center">@Ress.Ress.NotifyToMail</h1>
+<p class="col-sm-12 text-center">
+	@Model.NotifyToMail
+</p>
+
+
+@*<h1 class="text-center">@Ress.Ress.TitleMailSettings</h1>
+@if (Model.MailSettings != null)
+{
+	<div class="well col-sm-6 col-sm-offset-3">
+		<div class="row">
+			<div class="col-sm-2 text-right"><strong>@Ress.Ress.From:</strong></div>
+			<div class="col-sm-10">@Model.MailSettings.From</div>
+
+			<div class="col-sm-2 text-right"><strong>@Ress.Ress.Host:</strong></div>
+			<div class="col-sm-10">@Model.MailSettings.Host</div>
+
+			<div class="col-sm-2 text-right"><strong>@Ress.Ress.Port:</strong></div>
+			<div class="col-sm-10">@Model.MailSettings.Port</div>
+
+			<div class="col-sm-2 text-right"><strong>@Ress.Ress.Username:</strong></div>
+			<div class="col-sm-10">@Model.MailSettings.Username</div>
+
+			<div class="col-sm-2 text-right"><strong>@Ress.Ress.SSL:</strong></div>
+			<div class="col-sm-10">@Html.DisplayFor(model => model.MailSettings.SSL)</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+}*@

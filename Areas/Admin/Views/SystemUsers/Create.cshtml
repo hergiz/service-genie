@@ -1,0 +1,83 @@
+﻿@model Ser.Models.RegisterViewModel
+@{
+    ViewBag.Title = Ress.Ress.Create;
+}
+@section Action {
+			@Html.ActionLink(Ress.Ress.Cancel, "Index", null, new { @class = "btn btn-sm btn-default" })
+}
+<div class="col-sm-6 col-sm-offset-3">
+	@using (Html.BeginForm("Create", "SystemUsers", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+	{
+		@Html.AntiForgeryToken()
+
+		@Html.ValidationSummary("", new { @class = "text-error" })
+		<div class="form-group">
+			@Html.LabelFor(m => m.Name, new { @class = "col-sm-3 control-label" })
+			<div class="col-sm-9">
+				@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.Contact, new { @class = "col-sm-3 control-label" })
+			<div class="col-sm-9">
+				@Html.TextBoxFor(m => m.Contact, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.Email, new { @class = "col-sm-3 control-label" })
+			<div class="col-sm-9">
+				@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.UserName, new { @class = "col-sm-3 control-label" })
+			<div class="col-sm-9">
+				@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.Password, new { @class = "col-sm-3 control-label" })
+			<div class="col-sm-9">
+				@Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-sm-3 control-label" })
+			<div class="col-sm-9">
+				@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.PartnerId, new { @class = "col-sm-3 control-label" })
+			<div class="col-sm-9">
+				@MyHelpers.DropDown(ViewBag.PartnerDropDown, "PartnerId", "form-control", Ress.Ress.SelectIfApplicable, true)
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">
+				@Ress.Ress.SelectUserRole
+			</label>
+			<div class="col-sm-9">
+				@foreach (var item in (SelectList)ViewBag.RoleId)
+				{
+					if (item.Value != "SysAdmin")
+					{
+						<div>
+							<input type="checkbox" name="SelectedRoles" value="@item.Value" class="checkbox-inline" />
+							@Html.Label(item.Value, new { @class = "control-label" })
+						</div>
+					}
+				}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-12 text-right">
+				<input type="submit" class="btn btn-primary" value="@Ress.Ress.Create" />
+			</div>
+		</div>
+	}
+</div>
+<div class="clearfix"></div>
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

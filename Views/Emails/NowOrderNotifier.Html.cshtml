@@ -1,0 +1,25 @@
+﻿Content-Type: text/html; charset=utf-8
+<html>
+<head>
+	<title>@Ress.NewOrderFor @Model.Partner.FriendlyName</title>
+	@*@Styles.Render("~/Content/mail")*@
+</head>
+<body style="background: none;">
+	<div style="">
+		<h3>@Model.Title</h3>
+		<p>
+			@Ress.Fault: @Model.Fault 
+		</p>
+		<p>
+			@Ress.ForDate: @MyDisplay.DateTimeToDateWithName(Model.ForDate)
+		</p>
+		<p>
+			@Ress.EnteredBy: @Model.EnteredBy
+		</p>
+		<p>
+			@{ string ancor = "ancor-" + Model.OrderId.ToString(); }
+			@Html.ActionLink(Ress.GoToOrder, "Index", "Orders", Request.Url.Scheme, Request.Url.Host, ancor, new { area = "WorkOrder" }, null)
+		</p>
+	</div>
+</body>
+</html>

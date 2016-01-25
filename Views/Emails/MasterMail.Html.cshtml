@@ -1,0 +1,91 @@
+﻿Content-Type: text/html; charset=utf-8
+<html>
+<head>
+	<title>@Ress.NewOrderFor @Model.Partner.FriendlyName</title>
+	@Styles.Render("~/Content/mail")
+</head>
+<body style="background: none;">
+
+				<h2>@Model.Partner.Name</h2>
+				
+
+		<h3>@Ress.WorkOrderNo @Model.OrderId</h3>
+
+<div>
+@Ress.Title: @Model.Title: 
+</div>
+
+	@if (Model.MadeVM != null && Model.MadeVM.Count > 0)
+	{
+<table class="table">
+<tr>
+	<td>
+		@Ress.Section
+	</td>
+	<td>
+		@Ress.WhatWasMade
+	</td>
+	<td>
+		@Ress.Hours
+	</td>
+	</tr>
+	@{ decimal hours = 0; }
+	@foreach (var made in Model.MadeVM)
+	{
+	<tr>
+		<td>@made.Section</td>
+		<td class="pre">@made.WhatWasMade</td>
+		<td>
+			@made.Hours
+			@{ hours += made.Hours; }
+		</td>
+	</tr>
+				}
+</table>
+<div>@Ress.Hours: @hours</div>
+				}
+<br />
+			@if (Model.Materials != null && Model.Materials.Count > 0)
+			{
+			
+				<div>@Ress.Material</div>
+					foreach (var mat in Model.Materials)
+					{
+					<div>
+						@mat.Id x @mat.Name
+					</div>
+					}
+			}
+		<br />
+			@if (Model.Partner.ShowFinances == true && Model.PriceVM != null)
+			{
+			<div class="panel panel-default">
+				<div class="panel-heading">@Ress.Finances</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-5">
+							<strong>@Ress.Price: </strong>
+						</div>
+						<div class="col-sm-7">@Model.PriceVM.Price</div>
+						<div class="col-sm-5">
+							<strong>@Ress.Hours: </strong>
+						</div>
+						<div class="col-sm-7">@Model.PriceVM.Hours</div>
+						<div class="col-sm-5">
+							<strong>@Ress.Arrival: </strong>
+						</div>
+						<div class="col-sm-7">@Model.Arrival</div>
+						<div class="col-sm-5">
+							<strong>@Ress.Total: </strong>
+						</div>
+						<div class="col-sm-7">@Model.TotalTotal</div>
+					</div>
+				</div>
+			</div>
+			}
+	<br />
+		<div>
+			<strong>@Ress.Date: </strong>@MyDisplay.DateTimeToDate(Model.ForDate)
+		</div>
+</body>
+</html>

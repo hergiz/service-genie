@@ -1,0 +1,54 @@
+﻿@model Ser.Models.PartnerPortalVM.NewOrderPartnerPortalVM
+@{
+	Layout = "~/Views/Shared/_PartnerPortalLayout.cshtml";
+	ViewBag.Title = Ress.TitleNewWorkOrder;
+}
+
+@section Action {
+	@Html.ActionLink(Ress.Cancel, "Index", null, new { @class = "btn btn-sm btn-default" })
+}
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+	<div class="row text-center">
+		<div class="col-sm-6 col-sm-offset-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+				@Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="col-sm-6 col-sm-offset-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Section, htmlAttributes: new { @class = "control-label" })
+				@Html.TextBoxFor(model => model.Section, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Section, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="col-sm-12">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Fault, htmlAttributes: new { @class = "control-label" })
+				@Html.TextAreaFor(model => model.Fault, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Fault, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12 text-right">
+			<input type="submit" name="Save" value="@Ress.Save" class="btn btn-primary" />
+		</div>
+	</div>
+}
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}
+
+
+

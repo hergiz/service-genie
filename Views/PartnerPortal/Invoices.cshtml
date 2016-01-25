@@ -1,0 +1,199 @@
+﻿@model IEnumerable<Ser.Areas.WorkOrder.Models.Orders.ListOrdersVM>
+@{
+	Layout = "~/Views/Shared/_PartnerPortalLayout.cshtml";
+	ViewBag.Title = Ress.PartnerPortal;
+}
+
+@section Action {
+	@*@Html.ActionLink(Ress.New, "New", null, new { @class = "btn btn-sm btn-primary" })*@
+}
+
+@using (Html.BeginForm())
+{
+	<div class="row text-center">
+		<div class="col-sm-2 col-sm-offset-4">
+			<div class="form-group">
+				@MyHelpers.YearBox(ViewBag.Year, "year", "form-control", "year")
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<input type="submit" value="@Ress.Show" class="btn btn-primary" />
+		</div>
+	</div>
+}
+<div class="clearfix"></div>
+<br />
+<div class="well">
+	<div class="row text-center">
+		@if (ViewBag.Invoices != null)
+		{
+			foreach (var inv in ViewBag.Invoices)
+			{
+				if (!string.IsNullOrWhiteSpace(inv))
+				{
+				<span>
+					<a href="@Url.Action("Invoices", new { year = ViewBag.Year, invoice = inv })" class="label label-primary">@inv</a>
+				</span>
+				}
+			}
+		}
+	</div>
+</div>
+<div class="clearfix"></div>
+<table class="table table-hover table-responsive">
+	@if (Model != null && Model.Count() > 0)
+	{
+		foreach (var item in Model)
+		{
+			string signedClass = "";
+			if (item.Approved == true)
+			{
+				signedClass = "bg-info";
+			}
+			if (item.Disapproved == true)
+			{
+				signedClass = "bg-warning";
+			}
+			if (!string.IsNullOrWhiteSpace(item.Invoice))
+			{
+				signedClass = "bg-success";
+			}
+			<tr class="@signedClass">
+				<td>
+					<table class="table table-responsive" style="background: none;">
+						<tr>
+							<td rowspan="2" class="col-sm-1 text-center">
+								<h1>@Html.ActionLink(item.OrderId.ToString(), "WorkOrder", "Print", new { area = "WorkOrder", @id = @item.OrderId }, new { @class = "", target = "_blank" })</h1>
+								<div>@item.ServiceName</div>
+								@MyDisplay.DateTimeToDateNoYear(item.ForDate)
+							</td>
+							<td class="col-sm-6">
+								<strong>@item.Title</strong>
+							</td>
+							<td class="col-sm-3 text-center">
+								<div><strong>@Ress.Material</strong></div>
+
+								@if (item.MaterialNames != null && item.MaterialNames.Count() > 0)
+								{
+									foreach (var kom in item.MaterialNames)
+									{
+									<div><small>@kom.Id x @kom.Name</small></div>
+									}
+								}
+								else
+								{
+								<span class="glyphicon glyphicon-remove"></span>
+								}
+							</td>
+							<td rowspan="2" class="col-sm-2">
+								<div class="text-center">
+									<strong>@Ress.Invoice</strong>
+									<h4>@item.Invoice</h4>
+								</div>
+								<div class="small">@Ress.EnteredBy: @item.EnteredBy</div>
+								<div class="small">@Ress.OnTheCase: @item.OnTheCase</div>
+								<div class="small">@Ress.FinishedBy: @item.FinishedBy</div>
+								<div class="small">@Ress.ApprovedBy: @item.ApprovedBy</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" class="text-right">
+								<div class="row">
+									@{ string c1 = "col-sm-10"; string c2 = "col-sm-2";}
+									@if (string.IsNullOrWhiteSpace(item.FinishedBy))
+									{
+										c1 = "col-sm-12"; c2 = "hidden";
+									}
+									<div class="@c1">
+										<div class="col-sm-1 text-left small"><strong>@Ress.Fault:</strong></div>
+										<div class="col-sm-11 text-left small">@Html.DisplayFor(modelItem => item.Fault)</div>
+										@if (item.MadeVM != null && item.MadeVM.Count > 0)
+										{
+										<table class="table small table-bordered table-responsive" style="background:none;">
+											@foreach (var made in item.MadeVM)
+											{
+												if (!(made.Hours == 0 && string.IsNullOrWhiteSpace(made.Section) && string.IsNullOrWhiteSpace(made.WhatWasMade)))
+												{
+												<tr>
+													<td class="small text-left col-sm-2">@made.Section</td>
+													<td class="small text-left multiline">@made.WhatWasMade</td>
+													<td class="small text-left col-sm-1">@made.Hours</td>
+												</tr>
+												}
+
+											}
+										</table>
+										}
+									</div>
+									<div class="@c2">
+										@if (item.ShowFinances == true)
+										{
+										<div>
+											<strong>@Ress.Hours: </strong>
+											<h3 class="">@Html.DisplayFor(modelItem => item.PriceVM.Hours)</h3>
+										</div>
+										<div>
+											<strong>@Ress.Total: </strong>
+											<h3 class="">@Html.DisplayFor(modelItem => item.TotalTotal)</h3>
+										</div>
+										}
+										else
+										{
+										<div class="col-sm-12">
+											<strong>@Ress.Hours: </strong>
+											<h3 class="ig-display-inline">@Html.DisplayFor(modelItem => item.PriceVM.Hours)</h3>
+										</div>
+										}
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+											}
+										}
+</table>
+<hr />
+@if (ViewBag.Sum != null && ViewBag.Sum.Count > 0)
+{
+	decimal tot = 0;
+	foreach (var x in ViewBag.Sum)
+	{
+	<div class="row">
+		<div class="col-sm-2 col-sm-offset-1"><h3>@x.ServiceName</h3></div>
+		<div class="col-sm-3 text-right">
+			<h3 class="ig-display-inline">@x.Hours</h3>
+		</div>
+		<div class="col-sm-1 text-left">
+			<strong>@Ress.Hours</strong>
+		</div>
+		<div class="col-sm-3 text-right">
+			<h3 class="ig-display-inline">@MyDisplay.Currency(x.Total)</h3>
+		</div>
+	</div>
+		if (x.Total != null && x.Total > 0)
+		{
+			tot += x.Total;
+		}
+	}
+	<hr />
+	<div class="row">
+		<div class="col-sm-10 text-right">
+			<h2>@MyDisplay.Currency(tot)</h2>
+		</div>
+	</div>
+}
+@section Scripts {
+	<script type="text/javascript">
+		$(function () {
+			$('#year').datetimepicker({
+				locale: '@System.Configuration.ConfigurationManager.AppSettings["Culture"]',
+				format: 'YYYY',
+				viewMode: 'years'
+			});
+		});
+		
+	</script>
+	@Scripts.Render("~/bundles/jqueryval")
+}

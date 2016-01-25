@@ -1,0 +1,233 @@
+﻿@model IEnumerable<Ser.Areas.WorkOrder.Models.DisapprovedOrders.DisapprovedIndexVM>
+@{
+	ViewBag.Title = Ress.Ress.Disapproved;
+}
+@section Action {
+	@*@Html.ActionLink(Ress.Ress.New, "New", null, new { @class = "btn btn-sm btn-primary" })*@
+}
+@if (Model != null && Model.Count() > 0)
+{
+	foreach (var item in Model)
+	{
+		string signedClass = "";
+		if (item.OrderVM.Approved == true)
+		{
+			signedClass = "bg-info";
+		}
+		if (item.Disapproved.Resolved == false)
+		{
+			signedClass = "bg-warning";
+		}
+		if (!string.IsNullOrWhiteSpace(item.OrderVM.Invoice))
+		{
+			signedClass = "bg-success";
+		}
+	<table class="table table-responsive">
+		<tr class="@signedClass">
+			<td colspan="3">
+				<table class="table table-responsive" style="background: none;">
+					<tr>
+						<td rowspan="3" class="col-sm-1 text-center">
+							<h1>@Html.ActionLink(item.OrderVM.OrderId.ToString(), "WorkOrder", "Print", new { @id = @item.OrderVM.OrderId }, new { @class = "", target = "_blank" })</h1>
+							<div>@item.OrderVM.ServiceName</div>
+							@MyDisplay.DateTimeToDateNoYear(item.OrderVM.ForDate)
+							@if (item.OrderVM.Approved == false && string.IsNullOrWhiteSpace(item.OrderVM.Invoice))
+							{
+							<br />
+							@* Cancer order *@
+								<a data-toggle="modal" data-target="#CancelOrder-@item.OrderVM.OrderId" class="btn btn-danger btn-xs">
+									x
+								</a>
+								<div class="modal fade" id="CancelOrder-@item.OrderVM.OrderId" tabindex="-1" role="dialog" aria-labelledby="CancelLabel-@item.OrderVM.OrderId" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">@Ress.Ress.Close</span></button>
+												<h4 class="modal-title text-center" id="CancelLabel-@item.OrderVM.OrderId">@Ress.Ress.StornoReason</h4>
+											</div>
+											@using (Html.BeginForm("_CancelOrder", "Orders", FormMethod.Post))
+											{
+											@Html.AntiForgeryToken()
+												<div class="modal-body">
+													<div class="row">
+														<div class="col-sm-6 col-lg-offset-3">
+															<textarea name="reason" rows="4" class="form-control"></textarea>
+															<input type="hidden" name="id" value="@item.OrderVM.OrderId" />
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">@Ress.Ress.Cancel</button>
+													<button type="submit" class="btn btn-danger">@Ress.Ress.Storno</button>
+												</div>
+											}
+										</div>
+									</div>
+								</div>
+								@* End Cancer order *@
+							}
+						</td>
+						<td class="col-sm-6">
+							<strong>@item.OrderVM.Title</strong>
+						</td>
+						<td rowspan="2" class="col-sm-3 text-center">
+							@if (item.OrderVM.MaterialNames != null && item.OrderVM.MaterialNames.Count() > 0)
+							{
+								foreach (var kom in item.OrderVM.MaterialNames)
+								{
+								<div><small>@kom.Id x @kom.Name</small></div>
+								}
+							}
+							else
+							{
+							<span class="glyphicon glyphicon-remove"></span>
+							}
+							@if (item.OrderVM.Approved == false && string.IsNullOrWhiteSpace(item.OrderVM.Invoice))
+							{
+							<div>
+								@* Material *@
+								<a data-toggle="modal" data-target="#Material-@item.OrderVM.OrderId" class="btn btn-primary btn-xs">
+									@Ress.Ress.Add
+								</a>
+								<div class="modal fade" id="Material-@item.OrderVM.OrderId" tabindex="-1" role="dialog" aria-labelledby="MaterialLabel-@item.OrderVM.OrderId" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">@Ress.Ress.Close</span></button>
+												<h4 class="modal-title text-center" id="MaterialLabel-@item.OrderVM.OrderId">@Ress.Ress.Material</h4>
+											</div>
+											@using (Html.BeginForm("_Material", "Orders", FormMethod.Post))
+											{
+											@Html.AntiForgeryToken()
+												<div class="modal-body">
+													<div class="row text-center">
+														<div class="col-sm-4 col-lg-offset-4">
+															<label class="control-label" for="MaterialKom-@item.OrderVM.OrderId">@Ress.Ress.Piece</label>
+															<input class="form-control" data-val="true" data-val-required="@Ress.Ress.ErrNotEmpty" id="MaterialKom-@item.OrderVM.OrderId" name="Piece" type="number" value="1" />
+														</div>
+													</div>
+													<div class="row text-center">
+														<div class="col-sm-6 col-lg-offset-3">
+															<label class="control-label" for="MaterialName-@item.OrderVM.OrderId">@Ress.Ress.MaterialNames</label>
+															<input class="form-control" data-val="true" data-val-required="@Ress.Ress.ErrNotEmpty" id="MaterialName-@item.OrderVM.OrderId" name="MaterialName" type="text" value="" />
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<input type="hidden" name="id" value="@item.OrderVM.OrderId" />
+													<input type="hidden" name="returnTo" value="List" />
+													<button type="button" class="btn btn-default" data-dismiss="modal">@Ress.Ress.Cancel</button>
+													<button type="submit" class="btn btn-primary">@Ress.Ress.Add</button>
+												</div>
+											}
+										</div>
+									</div>
+								</div>
+								@* End Material *@
+							</div>
+							}
+						</td>
+						<td rowspan="3" class="col-sm-2">
+							<div class="small">@Ress.Ress.EnteredBy: @item.OrderVM.EnteredBy</div>
+							<div class="small">@Ress.Ress.OnTheCase: @item.OrderVM.OnTheCase</div>
+							<div class="small">@Ress.Ress.FinishedBy: @item.OrderVM.FinishedBy</div>
+							<div class="small">@Ress.Ress.ApprovedBy: @item.OrderVM.ApprovedBy</div>
+@if (item.OrderVM.Approved == false && string.IsNullOrWhiteSpace(item.OrderVM.Invoice))
+{
+							@* Storno*@
+							<a data-toggle="modal" data-target="#CancelOrder-@item.OrderVM.OrderId" class="btn btn-danger">
+								@Ress.Ress.Storno
+							</a>
+							<div class="modal fade" id="CancelOrder-@item.OrderVM.OrderId" tabindex="-1" role="dialog" aria-labelledby="CancelLabel-@item.OrderVM.OrderId" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">@Ress.Ress.Close</span></button>
+											<h4 class="modal-title text-center" id="CancelLabel-@item.OrderVM.OrderId">@Ress.Ress.StornoReason</h4>
+										</div>
+										@using (Html.BeginForm("_CancelOrder", "Orders", FormMethod.Post))
+										{
+										@Html.AntiForgeryToken()
+											<div class="modal-body">
+												<div class="row">
+													<div class="col-sm-6 col-lg-offset-3">
+														<textarea name="reason" rows="4" class="form-control">
+															@item.Disapproved.Reason
+														</textarea>
+														<input type="hidden" name="id" value="@item.OrderVM.OrderId" />
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-default" data-dismiss="modal">@Ress.Ress.Cancel</button>
+												<button type="submit" class="btn btn-danger">@Ress.Ress.Storno</button>
+											</div>
+										}
+									</div>
+								</div>
+							</div>
+							@* End Storno*@
+							@Html.ActionLink(Ress.Ress.Edit, "Edit", "DisapprovedOrders", new { @id = item.OrderVM.OrderId }, new { @class = "btn btn-primary" })
+}
+						</td>
+					</tr>
+					<tr>
+						<td class="no-border">
+							@Html.DisplayFor(modelItem => item.OrderVM.Approved) @item.OrderVM.PartnerFriendlyName
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="">
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Price: </strong>
+								<h3 class="ig-display-inline">@Html.DisplayFor(modelItem => item.OrderVM.PriceVM.Price)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Hours: </strong>
+								<h3 class="ig-display-inline">@Html.DisplayFor(modelItem => item.OrderVM.PriceVM.Hours)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Arrival: </strong>
+								<h3 class="ig-display-inline">@MyDisplay.CurrencyNullDecimal(item.OrderVM.Arrival)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Total: </strong>
+								@{ string clas = ""; }
+								@if (item.OrderVM.Total.HasValue)
+								{
+									clas = "text-danger";
+								}
+								<h3 class="ig-display-inline @clas">@Html.DisplayFor(modelItem => item.OrderVM.TotalTotal)</h3>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		@if (item.OrderVM.MadeVM != null && item.OrderVM.MadeVM.Count > 0)
+		{
+			foreach (var made in item.OrderVM.MadeVM)
+			{
+			<tr class="@signedClass">
+				<td class="col-sm-2">@made.Section</td>
+				<td class="col-sm-9 multiline">@made.WhatWasMade</td>
+				<td class="col-sm-1">@made.Hours</td>
+			</tr>
+			}
+		}
+		<tr class="bg-danger">
+			<td>
+				@item.Disapproved.DisapprovedBy
+				<div>@MyDisplay.DateTimeToDateTime(item.Disapproved.At)</div>
+			</td>
+			<td class="multiline">
+				@item.Disapproved.Reason
+			</td>
+			<td>
+				
+
+			</td>
+		</tr>
+</table>
+}
+}

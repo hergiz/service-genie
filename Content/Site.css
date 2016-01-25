@@ -1,0 +1,119 @@
+﻿.pre { white-space: pre-wrap; }
+.multiline {
+	white-space: pre-line;
+}
+.no-border { border: none !important; }
+.buvljak-link {
+	color: black;
+}
+
+.buvljak-pre {
+	white-space: pre-line;
+}
+
+.row-fluid {height: 100%; display:table-cell; vertical-align: middle !important;}
+
+.breadcrumb {
+	background-color: transparent !important; margin-bottom: 0px !important; font-weight: bold;
+}
+
+h4.ig-inline { margin-top: 0; margin-bottom: 0; display:inline; font-size: 1.1em; font-weight: 700;}
+
+.ig-display-inline {display:inline !important;}
+
+h1, h2, h3 {
+	margin-top: 0px !important;
+}
+.ig-no-v-space {margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;}
+.ig-no-v-space ul.pagination {margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;}
+
+.navbar-text {
+  margin-top: 7px !important;
+  margin-bottom: 0px !important;
+}
+
+.navbar {min-height: 55px; }
+
+.ig-nav-space ul li a { padding-top: 5px; padding-bottom: 5px; }
+
+.ig-nav-primary { font-weight: 700; font-size: 1.2em; margin-top: 0;  }
+
+.btn-nav {font-size: 1.1em; font-weight: 600; }
+
+.ig-nav-menu { color: red; font-weight: 700; text-transform: uppercase; font-size: 0.5em;
+}
+
+.ig-nav-submenu a { font-size: 0.5em; padding-bottom: 0 !important;
+}
+
+.ig-vertical-nav {margin: 0 10px 0 10px;}
+
+.ig-table-master td {font-size: 1.2em; font-weight: bold;}
+body {
+    padding-top: 55px;
+    padding-bottom: 20px;
+	background-color: lightgray;
+}
+
+.content-bg {background-color: white}
+
+.underline {border-bottom: 1px solid black; padding: 10px 40px 0 0; font-size: 1.1em; font-weight: bold; min-height: 30px;}
+
+.prn-sig { padding: 0 0 0 450px}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default 
+input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+tr.ig-invisible, tr.ig-invisible td {padding-top: 0 !important; padding-bottom: 0 !important; border-top: none !important;}
+.note small {font-size-adjust: 0.4 !important;}
+
+.back-to-top {background: none;
+position: fixed;
+bottom: 0;
+right: 0;
+width: 60px;
+height: 60px;
+z-index: 100;
+display: none;
+text-decoration: none;
+color: #FFF;
+background-color: none;
+}
+.back-to-top span {font-size: 60px; }
+
+.badge-danger { background-color: #d9534f; color: #ffffff; }

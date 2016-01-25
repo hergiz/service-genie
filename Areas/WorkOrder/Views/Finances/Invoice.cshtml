@@ -1,0 +1,170 @@
+﻿@model Ser.Areas.WorkOrder.Models.Finances.GroupInvoiceOrdersVM
+@{
+    ViewBag.Title = Ress.Ress.Invoice;
+}
+@section Action {
+	@Html.ActionLink(Ress.Ress.Cancel, "Index", null, new { @class = "btn btn-sm btn-default" })
+}
+
+<div class="row">
+	<div class="col-sm-2 col-sm-offset-3">@Ress.Ress.FromTo: </div>
+	<div class="col-sm-7">@MyDisplay.DateTimeToDate(Model.From) - @MyDisplay.DateTimeToDate(Model.To)</div>
+	<div class="col-sm-2 col-sm-offset-3">@Ress.Ress.Ids:</div>
+	<div class="col-sm-7">@Model.Ids</div>
+</div>
+<br />
+<div class="row">
+	@if (Model.SumOfFinances != null && Model.SumOfFinances.Count > 0)
+	{
+
+		decimal tot = 0;
+		foreach (var x in Model.SumOfFinances)
+		{
+
+			<div class="col-sm-2 col-sm-offset-3">@x.ServiceName</div>
+			<div class="col-sm-2">@x.Hours @Ress.Ress.Hours</div>
+			<div class="col-sm-2 text-right">@MyDisplay.Currency(x.Total)</div>
+			<div class="col-sm-3"></div>
+
+			if (x.Total > 0)
+			{
+				tot += x.Total;
+			}
+		}
+		<hr />
+		<div class="col-sm-9 text-right"><strong>@MyDisplay.Currency(tot)</strong></div>
+	}
+</div>
+<p class="row">
+	
+		@if (Model.PartnerNames.Count > 1)
+		{
+			<div class="col-sm-2 col-sm-offset-3">
+				<span class="text-danger">@Ress.Ress.Partners</span>
+			</div>
+			<div class="col-sm-7">
+				@foreach (var p in Model.PartnerNames)
+				{
+					<span class="label label-danger">@p</span>
+				}
+			</div>
+		}
+		else
+		{
+			<div class="col-sm-2 col-sm-offset-3">
+				@Ress.Ress.Partner
+			</div>
+			<div class="col-sm-7">
+				@foreach (var p in Model.PartnerNames)
+				{
+					<span class="label label-default">@p</span>
+				}
+			</div>
+		}
+	
+	
+</p>
+<p class="row">
+	@using (Html.BeginForm("CompleteInvoicing", "Finances"))
+	{
+		@Html.AntiForgeryToken()
+		@Html.ValidationSummary()
+
+		<div class="col-sm-2 col-sm-offset-3">
+			@Html.LabelFor(model => model.Invoice, htmlAttributes: new { @class = "control-label" })
+		</div>
+		<div class="col-sm-3">
+			@Html.TextBoxFor(model => model.Invoice, new { @class = "form-control" })
+			@Html.ValidationMessageFor(model => model.Invoice, "", new { @class = "text-danger" })
+		</div>
+		<div class="col-sm-1 text-right">
+			@Html.HiddenFor(model => model.Ids)
+			<input type="submit" name="submit" value="@Ress.Ress.Save" class="btn btn-primary" />
+		</div>
+		<div class="col-sm-3"></div>
+	}
+</p>
+<div class="clearfix"></div>
+<br />
+<br />
+<table class="table table-hover table-responsive">
+	@foreach (var item in Model.Orders)
+	{
+		string signedClass = "";
+		if (item.Approved == true)
+		{
+			signedClass = "bg-success";
+		}
+		if (item.Disapproved == true)
+		{
+			signedClass = "bg-warning";
+		}
+		if (!string.IsNullOrWhiteSpace(item.Invoice))
+		{
+			signedClass = "bg-info";
+		}
+		<tr class="@signedClass">
+			<td colspan="7">
+				<table class="table table-responsive" style="background: none;">
+					<tr>
+						<td rowspan="3" class="col-sm-1 text-center">
+							<h1>@Html.ActionLink(item.OrderId.ToString(), "WorkOrder", "Print", new { @id = @item.OrderId }, new { @class = "", target = "_blank" })</h1>
+							<div>@item.ServiceName</div>
+							@MyDisplay.DateTimeToDateNoYear(item.ForDate)
+						</td>
+						<td class="col-sm-6">
+							<strong>@item.Title</strong>
+						</td>
+						<td rowspan="2" class="col-sm-3 text-center">
+							@if (item.MaterialNames != null && item.MaterialNames.Count() > 0)
+							{
+								foreach (var kom in item.MaterialNames)
+								{
+								<div><small>@kom.Id x @kom.Name</small></div>
+								}
+							}
+							else
+							{
+							<span class="glyphicon glyphicon-remove"></span>
+							}
+						</td>
+						<td rowspan="3" class="col-sm-2 text-center">
+					
+						</td>
+					</tr>
+					<tr>
+						<td class="no-border">
+							@Html.DisplayFor(modelItem => item.Approved) @item.PartnerFriendlyName
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="">
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Price: </strong>
+								<h3 class="ig-display-inline">@Html.DisplayFor(modelItem => item.PriceVM.Price)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Hours: </strong>
+								<h3 class="ig-display-inline">@Html.DisplayFor(modelItem => item.PriceVM.Hours)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Arrival: </strong>
+								<h3 class="ig-display-inline">@MyDisplay.CurrencyNullDecimal(item.Arrival)</h3>
+							</div>
+							<div class="col-sm-3">
+								<strong>@Ress.Ress.Total: </strong>
+								@{ string clas = ""; }
+								@if (item.Total.HasValue)
+								{
+									clas = "text-danger";
+								}
+								<h3 class="ig-display-inline @clas">@Html.DisplayFor(modelItem => item.TotalTotal)</h3>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	}
+</table>
+<div class="clearfix"></div>

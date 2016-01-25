@@ -1,0 +1,210 @@
+﻿@helper DropDown(IEnumerable<Ser.Models.MyHelpers.DropDown> model, string name, string clas = "form-control", string nultiOdabir = "", bool prikaziNultiOdabir = true)
+{
+	if (model != null)
+	{
+		if (string.IsNullOrWhiteSpace(nultiOdabir))
+		{
+			nultiOdabir = Ress.Ress.DropDownDefault;
+		}
+
+		<select class="@clas" name="@name">
+			@if (prikaziNultiOdabir == true)
+			{
+			<option value="0">@nultiOdabir</option>
+			}
+
+			@foreach (var item in model)
+			{
+				if (item.Id == item.Selected)
+				{
+				<option selected="selected" value="@item.Id">@item.Name</option>
+				}
+				else
+				{
+				<option value="@item.Id">@item.Name</option>
+				}
+
+			}
+		</select>
+	}
+}
+
+@helper DropDownWithBool(IEnumerable<Ser.Models.MyHelpers.DropDownWithBool> model, string name, string clas = "form-control", string nultiOdabir = "", bool prikaziNultiOdabir = true, string id = "")
+{
+	if (model != null)
+	{
+		if (string.IsNullOrWhiteSpace(nultiOdabir))
+		{
+			nultiOdabir = Ress.Ress.DropDownDefault;
+		}
+
+		<select class="@clas" name="@name" id="@id">
+			@if (prikaziNultiOdabir == true)
+			{
+			<option value="0">@nultiOdabir</option>
+			}
+
+			@foreach (var item in model)
+			{
+				if (item.Id == item.Selected)
+				{
+				<option selected="selected" value="@item.Id">@item.Name</option>
+				}
+				else
+				{
+				<option value="@item.Id">@item.Name</option>
+				}
+
+			}
+		</select>
+	}
+}
+
+@helper DropDownIdentity(IEnumerable<Ser.Models.MyHelpers.DropDownIdentity> model, string name, string clas = "", string nultiOdabir = "Odaberi...")
+{
+	if (model != null)
+	{
+	<select class="@clas" name="@name">
+		<option value="">@nultiOdabir</option>
+		@foreach (var item in model)
+		{
+			if (item.UserName == item.Selected)
+			{
+			<option selected="selected" value="@item.UserName">@item.Name</option>
+			}
+			else
+			{
+			<option value="@item.UserName">@item.Name</option>
+			}
+		}
+	</select>
+	}
+}
+
+@helper DropDownSelectedString(IEnumerable<Ser.Models.MyHelpers.DropDownSelectedString> model, string name, string clas = "", string nultiOdabir = "Odaberi...")
+{
+	if (model != null)
+	{
+	<select class="@clas" name="@name">
+		<option value="">@nultiOdabir</option>
+		@foreach (var item in model)
+		{
+			if (item.SelectedVal == item.Selected)
+			{
+			<option selected="selected" value="@item.Id">@item.Name</option>
+			}
+			else
+			{
+			<option value="@item.Id">@item.Name</option>
+			}
+		}
+	</select>
+	}
+}
+
+@helper CheckBox(IEnumerable<Ser.Models.MyHelpers.CheckBox> model, string name, string clas = "", bool req = false)
+{
+	if (model != null)
+	{
+	<div class="row">
+		<div class="col-sm-12">
+			@foreach (var item in model)
+			{
+				string required = "";
+				string selected = "";
+				if (item.Selected == true)
+				{
+					selected = "checked=\"checked\"";
+				}
+				if (req == true)
+				{
+					selected = "required=\"required\"";
+				}
+				<div>
+					<span>
+						<input type="checkbox" name="@name" value="@item.Id" @required class="@clas" @selected />
+					</span>
+					<span>
+						@item.Val
+					</span>
+				</div>
+			}
+		</div>
+	</div>
+
+	}
+}
+
+@helper DateTimeBox(DateTime? dateTime, string name, string clas = "form-control", string id = "DateTime")
+{
+	string sad;
+	if (dateTime.HasValue)
+	{
+		DateTime tmp = (DateTime)dateTime;
+		sad = tmp.ToString(@"dd.MM.yyyy HH:mm");
+	}
+	else
+	{
+		sad = DateTime.Now.ToString(@"dd.MM.yyyy HH:mm");
+	}
+
+	<input type="datetime" name="@name" id="@id" class="@clas" value="@sad" data-date-format="DD.MM.YYYY HH:mm" />
+}
+
+@helper DateBox(DateTime? date, string name, string clas = "form-control", string id = "Date")
+{
+	string sad;
+	if (date.HasValue)
+	{
+		sad = date.Value.Date.ToShortDateString();
+	}
+	else
+	{
+		sad = DateTime.Now.ToShortDateString();
+	}
+
+	<input type="datetime" name="@name" id="@id" class="@clas" value="@sad" data-date-format="DD.MM.YYYY" />
+}
+
+@helper YearBox(int? year, string name, string clas = "form-control", string id = "Year")
+{
+	int y;
+	if (year.HasValue)
+	{
+		y = (int)year;
+	}
+	else
+	{
+		y = DateTime.Today.Year;
+	}
+
+	<input type="number" name="@name" id="@id" class="@clas" value="@y" />
+}
+
+@helper TimeBox(TimeSpan? time, string name, string clas = "form-control", string id = "Time")
+{
+	if (time == null) { time = TimeSpan.FromHours(8); }
+	<input type="time" name="@name" id="@id" class="@clas" value="@MyDisplay.TimeSpanToTime(time)" data-date-format="HH:mm" />
+}
+
+@helper RadioBox(IEnumerable<Ser.Models.MyHelpers.DropDown> model, string name, string clas = "form-control")
+{
+	if (model != null)
+	{
+		<ul class="list-inline">
+			@foreach (var item in model)
+			{
+				string selected = "";
+				if (item.Selected == item.Id)
+				{
+					selected = "checked";
+				}
+
+				<li>
+					<input type="radio" name="@name" value="@item.Id" class="@clas" @selected /> @item.Name
+				</li>
+			}
+		</ul>
+
+	}
+}

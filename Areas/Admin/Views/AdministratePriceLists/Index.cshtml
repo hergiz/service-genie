@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Ser.Models.PriceList>
+
+@{
+    ViewBag.Title = Ress.Ress.PriceList;
+}
+@section Action {
+	@*@Html.ActionLink(Ress.Ress.New, "Create", null, new { @class = "btn btn-sm btn-primary" })*@
+}
+
+<div class="col-sm-5 col-sm-offset-3">
+@using (Html.BeginForm("Redirect", "AdministratePriceLists"))
+{
+		<div class="col-sm-8">
+			@MyHelpers.DropDown(ViewBag.PartnerDropDown, "id", "form-control", Ress.Ress.NoPartner, true)
+		</div>
+		<div class="col-sm-4">
+			<input type="submit" value="@Ress.Ress.Edit" class="btn btn-primary" />
+		</div>
+}
+<div class="clearfix"></div>
+<br />
+@foreach (var par in ViewBag.Partner)
+{
+	<table class="table table-responsive table-hover">
+		
+		@{ bool x = false; }
+		@foreach (var item in Model)
+		{
+			if (item.PartnerId == par)
+			{
+				if (x == false)
+				{
+					<tr>
+						<td colspan="2" class="text-center">
+							@if (item.Partner != null && item.Partner.Name != null)
+							{
+								<strong>@item.Partner.Name</strong>
+							}
+							else
+							{
+								<strong>@Ress.Ress.NoPartner</strong>
+							}
+						</td>
+					</tr>
+					x = true;
+					<tr>
+						<th>
+							@Ress.Ress.ServiceId
+						</th>
+						<th>
+							@Ress.Ress.Price
+						</th>
+					</tr>
+				}
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Service.Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Price)
+					</td>
+				</tr>
+			}
+
+		}
+
+	</table>
+}
+</div>
+<div class="clearfix"></div>

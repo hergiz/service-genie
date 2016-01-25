@@ -1,0 +1,21 @@
+﻿@model Ser.Areas.WorkOrder.Models.Orders.WhatWasMadeVM
+	<div class="col-sm-3">
+		<div class="form-group">
+			<label class="control-label" for="MadeVM_@(Model.Index)__Section">@Ress.Ress.Section</label>
+			<input class="form-control iHidden" name="MadeVM[@Model.Index].Section" type="text" value="@Model.Section" id="MadeVM_@(Model.Index)__Section" />
+		</div>
+	</div>
+	<div class="col-sm-7">
+		<div class="form-group">
+			<label class="control-label" for="MadeVM_@(Model.Index)__WhatWasMade">@Ress.Ress.WhatWasMade</label>
+			<textarea class="form-control" name="MadeVM[@Model.Index].WhatWasMade" id="MadeVM_@(Model.Index)__WhatWasMade" >@Model.WhatWasMade</textarea>
+		</div>
+	</div>
+	<div class="col-sm-2">
+		<div class="form-group">
+			<label class="control-label" for="MadeVM_@(Model.Index)__Hours">@Ress.Ress.Hours</label>
+			<input class="form-control" data-val="true" data-val-number="@Ress.Ress.ErrMustBeANumber" data-val-required="@Ress.Ress.ErrNotEmpty" name="MadeVM[@Model.Index].Hours" type="text" value="@Model.Hours" id="MadeVM_@(Model.Index)__Hours" />
+			<span class="field-validation-valid text-danger" data-valmsg-for="MadeVM_@(Model.Index)__Hours" data-valmsg-replace="true"></span>
+		</div>
+	</div>
+	<div class="clearfix"></div>

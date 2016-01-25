@@ -1,0 +1,18 @@
+﻿Content-Type: text/html; charset=utf-8
+<html>
+<head>
+	<title>@Ress.WorkOrderNo @Model.OrderId</title>
+	@*@Styles.Render("~/Content/mail")*@
+</head>
+<body style="background: none;">
+	<div style="margin: 0 auto; text-align:center;">
+		<h3>@Ress.WorkOrderNo @Model.OrderId</h3>
+		<p>
+			@Ress.MailBodyLine1
+		</p>
+		<p>
+			<a href='@Url.Action("SignOrder", "Home", new { order = Model.AccessLink, who = Model.To.ToString() }, Request.Url.Scheme)'>@Ress.SignOrder</a>
+		</p>
+	</div>
+</body>
+</html>

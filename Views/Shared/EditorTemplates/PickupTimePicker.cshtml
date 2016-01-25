@@ -1,0 +1,13 @@
+﻿@model DateTime?
+@{
+	string sad;
+	if (Model.HasValue)
+	{
+		sad = Model.Value.ToString("dd.MM.yyyy hh:mm");
+	}
+	else
+	{
+		sad = DateTime.Now.AddDays(1).ToString("dd.MM.yyyy 08:00");
+	}
+}
+@{<input type="datetime" name="PickupTime" id="PickupTime" class="form-control" value="@sad" data-date-format="DD.MM.YYYY HH:mm" />} 

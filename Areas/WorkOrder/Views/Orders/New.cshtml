@@ -1,0 +1,111 @@
+﻿@model Ser.Areas.WorkOrder.Models.Orders.NewWorkOrderVM
+@{
+	ViewBag.Title = Ress.Ress.TitleNewWorkOrder;
+}
+@section Action {
+	@Html.ActionLink(Ress.Ress.Cancel, "Index", null, new { @class = "btn btn-sm btn-default" })
+}
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+	<div class="row text-center">
+		<div class="col-sm-3 col-sm-offset-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Partner, htmlAttributes: new { @class = "control-label" })
+				@Html.TextBoxFor(model => model.Partner, new { @class = "form-control", autocomplete = "off" })
+				@Html.ValidationMessageFor(model => model.Partner, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-sm-3" id="SelectedPartner">
+			<strong>@Ress.Ress.PartnerSelected</strong>
+			<input type="hidden" name="PartnerId" value="" id="PartnerId" />
+			<h2 id="PartnerIdLabel"><span class="glyphicon glyphicon-remove"></span></h2>
+		</div>
+		<div class="col-sm-3">
+			@Html.ActionLink(Ress.Ress.NewPartner, "Create", "Partners", new { area = "Partners" }, new { @class = "btn btn-default", target = "_Partners" })
+		</div>
+	</div>
+
+	<div class="row text-center">
+		<div class="col-sm-6 col-sm-offset-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+				@Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="col-sm-12">
+			<div class="form-group">
+				@Html.LabelFor(model => model.ServiceId, htmlAttributes: new { @class = "control-label" })
+				@MyHelpers.RadioBox(Model.Service, "ServiceId", "form-control")
+				@Html.ValidationMessageFor(model => model.ServiceId, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="col-sm-6 col-sm-offset-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Section, htmlAttributes: new { @class = "control-label" })
+				@Html.TextBoxFor(model => model.Section, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Section, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="col-sm-12">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Fault, htmlAttributes: new { @class = "control-label" })
+				@Html.TextAreaFor(model => model.Fault, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Fault, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="col-sm-12">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
+				@Html.TextBoxFor(model => model.Note, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 text-right">
+			<input type="submit" name="Save" value="@Ress.Ress.Save" class="btn btn-primary" />
+		</div>
+	</div>
+}
+@section Scripts {
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#Partner").autocomplete({
+				source: function (request, response) {
+					$.ajax({
+						url: "@(Url.Action("PartnerAutoComplete", "Orders"))",
+						type: "POST",
+					dataType: "json",
+					data: { term: request.term },
+					success: function (data) {
+						response($.map(data, function (item) {
+							return { label: item.label, value: item.label, id: item.id };
+						}))
+					}
+				})
+			},
+			minLength: 1,
+			select: function (event, ui) {
+				$("#PartnerId").val(ui.item.id);
+				$("#PartnerIdLabel").html(ui.item.label);
+				$("#Partner").val("");
+				return false;
+			}
+			});
+		})
+	</script>
+	@Scripts.Render("~/bundles/jqueryval")
+}
+
