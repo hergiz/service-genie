@@ -1,13 +1,12 @@
-﻿<<<<<<< HEAD
-﻿# Service Genie
-=======
+﻿﻿# Service Genie
+
 ### Service Genie - Work Order management MVC 5 web app
 
 
 Project home page: http://www.opacus.hr/en/ServiceGenie/General
 
 Demo is here: http://opacus.hr/ser
-<<<<<<< HEAD
+
 
 ## INFO
 
@@ -98,7 +97,7 @@ Good luck!
 ## Change log
 
 ### 1.0.1
-...Add material in New One Step Order
-...Add group material list when group facturing
-...Add group material list when viewing invoces
-...Minour bug fixes
+- Add material in New One Step Order
+- Add group material list when group facturing
+- Add group material list when viewing invoces
+- Minour bug fixes
