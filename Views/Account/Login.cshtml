@@ -35,6 +35,12 @@
 				</div>
 			}
 		</section>
+		@if (ViewBag.Demo != null && ViewBag.Demo == "true")
+		{
+		<div>@Ress.UserName: DemoUser</div>
+		<deiv>@Ress.Password: DemoUser123</deiv>
+		}
+		
 	</div>
 </div>
 <div class="clearfix"></div>

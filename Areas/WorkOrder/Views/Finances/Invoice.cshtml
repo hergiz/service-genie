@@ -86,6 +86,21 @@
 </p>
 <div class="clearfix"></div>
 <br />
+@if (Model.Mat != null)
+{
+	<div class="row">
+		<div class="col-sm-9 col-sm-offset-3">
+			<strong>@Ress.Ress.Material</strong>
+		</div>
+		@foreach (var m in Model.Mat)
+		{
+		<div class="col-sm-9 col-sm-offset-3">
+			@m.Id x @m.Name
+		</div>
+		}
+	</div>
+}
+<br />
 <br />
 <table class="table table-hover table-responsive">
 	@foreach (var item in Model.Orders)

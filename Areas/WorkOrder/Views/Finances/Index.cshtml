@@ -3,8 +3,7 @@
 	ViewBag.Title = Ress.Ress.TitleListOrders;
 }
 @section Action {
-	@*@Html.ActionLink(Ress.Ress.NewOneStep, "NewOneStep", null, new { @class = "btn btn-sm btn-primary" })
-	@Html.ActionLink(Ress.Ress.New, "New", null, new { @class = "btn btn-sm btn-primary" })*@
+	@Html.ActionLink(Ress.Ress.Invoices, "ListInvoices", null, new { @class = "btn btn-sm btn-primary" })
 }
 @using (Html.BeginForm())
 {

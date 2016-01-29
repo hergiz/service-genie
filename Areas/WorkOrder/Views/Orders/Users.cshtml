@@ -124,6 +124,7 @@
 @if (ViewBag.Sum != null && ViewBag.Sum.Count > 0)
 {
 	decimal tot = 0;
+	decimal hou = 0;
 	foreach (var x in ViewBag.Sum)
 	{
 	<div class="row">
@@ -142,10 +143,14 @@
 		{
 			tot += x.Total;
 		}
+		hou += x.Hours;
 	}
 	<hr />
 	<div class="row">
-		<div class="col-sm-10 text-right">
+		<div class="col-sm-3 col-sm-offset-3 text-right">
+			<h2>@hou</h2>
+		</div>
+		<div class="col-sm-4 text-right">
 			<h2>@MyDisplay.Currency(tot)</h2>
 		</div>
 	</div>

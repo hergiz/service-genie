@@ -64,6 +64,7 @@
 			</div>
 		</div>
 	</div>
+	@* What Was Made *@
 	if (Model.MadeVM != null && Model.MadeVM.Count > 0)
 	{
 		for (int i = 0; i < Model.MadeVM.Count; i++)
@@ -84,6 +85,31 @@
 			@Html.ActionLink(Ress.Ress.Add, "_WhatWasMade", null, new { @id = "add", @class = "btn btn-default" })
 		</div>
 	</div>
+	<div class="clearfix"></div>
+	<br />
+	@* Material *@
+	if (Model.MaterialNames != null && Model.MaterialNames.Count > 0)
+	{
+		for (int i = 0; i < Model.MaterialNames.Count; i++)
+		{
+		<div class="row text-center" id="add-Material">
+			@{ Model.MaterialNames[i].Selected = i; Html.RenderPartial("_MaterialInOneStep", Model.MaterialNames[i]); }
+		</div>
+		}
+	}
+	else
+	{
+		<div class="row text-center" id="add-Material">
+			@{ Html.RenderAction("_MaterialInOneStep", "Orders", new { @id = 0, i = 0 }); }
+		</div>
+	}
+	<div class="row text-center">
+		<div class="col-sm-12">
+			@Html.ActionLink(Ress.Ress.Add, "_MaterialInOneStep", null, new { @id = "add-mat", @class = "btn btn-default" })
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
 	<p class="row text-center">
 		<div class="col-sm-2 col-sm-offset-4">
 			@Html.LabelFor(model => model.Arrival, htmlAttributes: new { @class = "control-label" })
@@ -111,7 +137,7 @@
 		</div>
 	</p>
 	<div class="row">
-		<div class="col-sm-12 text-right">
+		<div class="col-sm-12 text-center">
 			<input type="submit" name="Save" value="@Ress.Ress.Save" class="btn btn-primary" />
 		</div>
 	</div>
@@ -128,6 +154,22 @@
 					cache: false,
 					success: function (result) {
 						$('#add-WhatWasMade').append(result);
+					}
+				});
+				return false;
+			});
+		});
+
+		$(function () {
+			$('#add-mat').click(function () {
+				var index = $("input.iHiddenMat").length;
+				$.ajax({
+					url: this.href,
+					type: 'GET',
+					data: { id: null, i: index },
+					cache: false,
+					success: function (result) {
+						$('#add-Material').append(result);
 					}
 				});
 				return false;
@@ -158,6 +200,15 @@
 			}
 			});
 		})
+
+		$(document).ready(function () {
+			$(document).on('focus', '#ForDate', function () {
+				$(this).datetimepicker({
+					locale: '@System.Configuration.ConfigurationManager.AppSettings["Culture"]',
+					format: 'DD:MM:YYYY',
+				});
+			});
+		});
 	</script>
 	@Scripts.Render("~/bundles/jqueryval")
 }
