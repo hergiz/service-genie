@@ -2,15 +2,14 @@
 <div class="col-sm-2 col-sm-offset-3">
 	<div class="form-group">
 		<label class="control-label" for="MaterialNames_@(Model.Selected)__Id">@Ress.Ress.Piece</label>
-		<input class="form-control iHiddenMat" name="MaterialNames[@Model.Selected].Id" type="number" value="@Model.Id" id="MaterialNames_@(Model.Selected)__Id" data-val="true" data-val-number="@Ress.Ress.ErrMustBeANumber" data-val-required="@Ress.Ress.ErrNotEmpty" />
+		<input class="form-control iHiddenMat" name="MaterialNames[@Model.Selected].Id" type="number" value="@Model.Id" id="MaterialNames_@(Model.Selected)__Id" data-val="true" data-val-number="@Ress.Ress.ErrMustBeANumber" />
 		<span class="field-validation-valid text-danger" data-valmsg-for="MaterialNames_@(Model.Selected)__Id" data-valmsg-replace="true"></span>
 	</div>
 </div>
 <div class="col-sm-5">
 	<div class="form-group">
 		<label class="control-label" for="MaterialNames_@(Model.Selected)__Name">@Ress.Ress.MaterialNames</label>
-		<input class="form-control" data-val="true" data-val-required="@Ress.Ress.ErrNotEmpty" name="MaterialNames[@Model.Selected].Name" type="text" value="@Model.Name" id="MaterialNames_@(Model.Selected)__Name" />
-		<span class="field-validation-valid text-danger" data-valmsg-for="MaterialNames_@(Model.Selected)__Name" data-valmsg-replace="true"></span>
+		<input class="form-control" name="MaterialNames[@Model.Selected].Name" type="text" value="@Model.Name" id="MaterialNames_@(Model.Selected)__Name" />
 	</div>
 </div>
 <div class="clearfix"></div>

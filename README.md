@@ -1,4 +1,4 @@
-﻿﻿# Service Genie
+﻿Service Genie
 =======
 ### Service Genie - Work Order management MVC 5 web app
 
@@ -95,6 +95,9 @@ Good luck!
 
 
 ## Change log
+
+### 1.0.2
+- Material in New One Step Order now is not mandatory
 
 ### 1.0.1
 - Add material in New One Step Order
