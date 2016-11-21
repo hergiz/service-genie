@@ -5,7 +5,7 @@
 
 Project home page: http://www.opacus.hr/en/ServiceGenie/General
 
-Demo is here: http://opacus.hr/ser
+Demo is here: ~~opacus.hr/ser~~
 
 
 ## INFO
